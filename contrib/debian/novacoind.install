@@ -1,0 +1,2 @@
+debian/bin/SACoind usr/bin
+src/SACoind usr/lib/SACoin

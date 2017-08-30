@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: SACoin
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# SACoin_enable (bool): Set to NO by default. Set this variable to YES if you want to enable SACoin service.
+# SACoin_config (path): Set to /usr/local/etc/SACoin.conf by default.
+# SACoin_user:  The user account SACoin daemon runs as. It uses 'root' user by default.
+# SACoin_group: The group account SACoin daemon runs as. It uses 'wheel' group by default.
+# SACoin_datadir (str): Default to "/var/db/SACoin". Base data directory.
+
+. /etc/rc.subr
+
+name=SACoin
+rcvar=SACoin_enable
+
+: ${SACoin_enable:=NO}
+: ${SACoin_config=/usr/local/etc/SACoin.conf}
+: ${SACoin_datadir=/var/db/SACoin}
+: ${SACoin_user="root"}
+: ${SACoin_group="wheel"}
+
+required_files=${SACoin_config}
+command=/usr/local/bin/SACoind
+SACoin_chdir=${SACoin_datadir}
+pidfile="${SACoin_datadir}/SACoind.pid"
+stop_cmd=SACoin_stop
+command_args="-conf=${SACoin_config} -datadir=${SACoin_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+SACoin_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${SACoin_datadir}
+	[ $? -eq 0 ] && chown -R ${SACoin_user}:${SACoin_group} ${SACoin_datadir}
+}
+
+SACoin_prestart()
+{
+	if [ ! -d "${SACoin_datadir}/." ]; then
+		SACoin_create_datadir || return 1
+	fi
+}
+
+SACoin_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+SACoin_stop()
+{
+    SACoin_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${SACoin_config} -datadir=${SACoin_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

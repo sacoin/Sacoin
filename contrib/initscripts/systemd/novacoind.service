@@ -1,0 +1,11 @@
+[Unit]
+Description=SACoin daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=SACoin
+ExecStart=/opt/SACoin/SACoind
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+Building SACoin
+
+See doc/readme-qt.rst for instructions on building SACoin Qt,
+the intended-for-end-users, nice-graphical-interface, reference
+implementation of SACoin.
+
+See doc/build-*.txt for instructions on building SACoind,
+the intended-for-services, no-graphical-interface, reference
+implementation of SACoin.

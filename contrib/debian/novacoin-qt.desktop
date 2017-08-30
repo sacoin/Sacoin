@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=SACoin
+Comment=SACoin P2P Cryptocurrency
+Comment[ru]=SACoin, P2P криптовалюта
+Comment[fr]=SACoin, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=SACoin, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/SACoin-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/SACoin80.xpm
+MimeType=x-scheme-handler/SACoin;
+Categories=Office;
